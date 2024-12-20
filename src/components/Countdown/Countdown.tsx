@@ -1,101 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TimeInput } from './TimeInput';
 import Slider from './Slider';
 import { Progress } from './Progress';
 import { CountdownContainer } from './Style/Countdown.style';
-import { Button } from './Style/Button.style';
-// import { ButtonStyled } from '../Timer/Button/Button.style';
-import soundFile from '/Users/macbookair/my-timer/src/assets/audio/zvukovoy-signal-vyihoda-iz-sotssetey.mp3';
-
-// export const Countdown = () => {
-//     const [isActive, setIsActive] = useState(false);
-//     const [totalSeconds, setTotalSeconds] = useState(0);
-//     const [remainingTime, setRemainingTime] = useState(0);
-//     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Используем ReturnType
-
-//     const playSound = () => {
-//         const audio = new Audio(soundFile);
-//         audio.play();
-//     };
-
-//     useEffect(() => {
-//         if (isActive && remainingTime > 0) {
-//             const id = setInterval(() => {
-//                 setRemainingTime(prev => {
-//                     if (prev <= 1) {
-//                         clearInterval(id);
-//                         playSound();
-//                         return 0;
-//                     }
-//                     return prev - 1;
-//                 });
-//             }, 1000);
-//             setIntervalId(id); // Устанавливаем id
-//         } else if (intervalId) {
-//             clearInterval(intervalId);
-//         }
-
-//         return () => {
-//             if (intervalId) {
-//                 clearInterval(intervalId);
-//             }
-//         };
-//     }, [isActive, remainingTime, intervalId]); // Добавьте intervalId в зависимости
-
-//     const startCountdown = () => {
-//         setIsActive(true);
-//         setRemainingTime(totalSeconds); // Устанавливаем оставшееся время при старте
-//     };
-
-//     const pauseCountdown = () => {
-//         setIsActive(false);
-//     };
-
-//     const stopCountdown = () => {
-//         setIsActive(false);
-//         setRemainingTime(0);
-//         setTotalSeconds(0);
-//     };
-
-//     return (
-//         <CountdownContainer>
-//             <h2>Countdown</h2>
-//             <TimeInput
-//                 totalSeconds={totalSeconds}
-//                 setTotalSeconds={setTotalSeconds}
-//                 isActive={isActive}
-//             />
-//             <Slider
-//                 totalSeconds={totalSeconds}
-//                 setTotalSeconds={setTotalSeconds}
-//                 isActive={isActive}
-//             />
-//             <Progress value={totalSeconds - remainingTime} max={totalSeconds} />
-//             <p>
-//                 Time: {Math.floor(remainingTime / 60)} :{' '}
-//                 {remainingTime % 60 < 10
-//                     ? `0${remainingTime % 60}`
-//                     : remainingTime % 60}
-//             </p>
-//             {!isActive ? (
-//                 <Button onClick={startCountdown}>Старт</Button>
-//             ) : (
-//                 <Button onClick={pauseCountdown}>Пауза</Button>
-//             )}
-//             <Button onClick={stopCountdown}>Стоп</Button>
-//         </CountdownContainer>
-//     );
-// };
+import { StartButton, PauseButton, StopButton } from '../Button/Button';
+import { Title } from '../Title/Title';
+import { TimeDisplay } from './Style/TimeDisplay';
 
 export const Countdown = () => {
     const [isActive, setIsActive] = useState(false);
     const [totalSeconds, setTotalSeconds] = useState(0);
     const [remainingTime, setRemainingTime] = useState(0);
 
-    const playSound = () => {
-        const audio = new Audio(soundFile);
-        audio.play();
-    };
+    const playSound = useMemo(
+        () => new Audio(`${process.env.PUBLIC_URL}/playSound.mp3`),
+        []
+    );
 
     useEffect(() => {
         let intervalId: ReturnType<typeof setInterval> | null = null; // Используем ReturnType
@@ -105,7 +25,7 @@ export const Countdown = () => {
                 setRemainingTime(prev => {
                     if (prev <= 1) {
                         clearInterval(intervalId!);
-                        playSound();
+                        playSound.play();
                         return 0;
                     }
                     return prev - 1;
@@ -118,7 +38,7 @@ export const Countdown = () => {
                 clearInterval(intervalId);
             }
         };
-    }, [isActive]);
+    }, [isActive, playSound]);
 
     useEffect(() => {
         if (remainingTime === 0 && isActive) {
@@ -128,7 +48,10 @@ export const Countdown = () => {
 
     const startCountdown = () => {
         setIsActive(true);
-        setRemainingTime(totalSeconds); // Устанавливаем оставшееся время при старте
+
+        if (remainingTime === 0) {
+            setRemainingTime(totalSeconds);
+        }
     };
 
     const pauseCountdown = () => {
@@ -143,7 +66,7 @@ export const Countdown = () => {
 
     return (
         <CountdownContainer>
-            <h2>Countdown</h2>
+            <Title>Таймер обратного отсчета</Title>
             <TimeInput
                 totalSeconds={totalSeconds}
                 setTotalSeconds={setTotalSeconds}
@@ -155,18 +78,18 @@ export const Countdown = () => {
                 isActive={isActive}
             />
             <Progress value={totalSeconds - remainingTime} max={totalSeconds} />
-            <p>
-                Time: {Math.floor(remainingTime / 60)} :{' '}
+            <TimeDisplay>
+                {Math.floor(remainingTime / 60)} :{' '}
                 {remainingTime % 60 < 10
                     ? `0${remainingTime % 60}`
                     : remainingTime % 60}
-            </p>
+            </TimeDisplay>
             {!isActive ? (
-                <Button onClick={startCountdown}>Старт</Button>
+                <StartButton onClick={startCountdown}>Старт</StartButton>
             ) : (
-                <Button onClick={pauseCountdown}>Пауза</Button>
+                <PauseButton onClick={pauseCountdown}>Пауза</PauseButton>
             )}
-            <Button onClick={stopCountdown}>Стоп</Button>
+            <StopButton onClick={stopCountdown}>Стоп</StopButton>
         </CountdownContainer>
     );
 };

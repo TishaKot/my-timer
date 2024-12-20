@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
-import { ButtonStyled } from './Button/Button.style';
+import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { TimerWrapper, TimerDisplay } from './Timer.style';
+import { StartButton, PauseButton, StopButton } from '../Button/Button';
+import { Title } from '../Title/Title';
 
 const Timer = memo(() => {
     const [isRunning, setIsRunning] = useState(false);
@@ -11,8 +12,8 @@ const Timer = memo(() => {
         if (!isRunning) {
             setIsRunning(true);
             const id = setInterval(() => {
-                setTime(prevTime => prevTime + 100);
-            }, 100);
+                setTime(prevTime => prevTime + 10);
+            }, 10);
             setIntervalId(id);
         }
     }, [isRunning]);
@@ -40,25 +41,23 @@ const Timer = memo(() => {
         };
     }, [intervalId]);
 
-    const formatTime = useCallback((time: number) => {
+    const formatTime = useMemo(() => {
         const minutes = Math.floor((time / 60000) % 60);
         const seconds = Math.floor((time / 1000) % 60);
         const milliseconds = Math.floor((time % 1000) / 100);
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${milliseconds}`;
-    }, []);
-
-    const getButtonText = () => {
-        return isRunning ? 'Пауза' : 'Запустить';
-    };
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`;
+    }, [time]);
 
     return (
         <TimerWrapper>
-            <h2>Секундомер</h2>
-            <TimerDisplay>{formatTime(time)}</TimerDisplay>
-            <ButtonStyled onClick={isRunning ? pauseTimer : startTimer}>
-                {getButtonText()}
-            </ButtonStyled>
-            <ButtonStyled onClick={resetTimer}>Сбросить</ButtonStyled>
+            <Title>Секундомер</Title>
+            <TimerDisplay>{formatTime}</TimerDisplay>
+            {isRunning ? (
+                <PauseButton onClick={pauseTimer}>Пауза</PauseButton> // Передаем children
+            ) : (
+                <StartButton onClick={startTimer}>Старт</StartButton> // Передаем children
+            )}
+            <StopButton onClick={resetTimer}>Стоп</StopButton>
         </TimerWrapper>
     );
 });

@@ -1,13 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const SliderContainer = styled.div`
-    margin: 20px 0;
-`;
-
-const SliderInput = styled.input`
-    width: 50%;
-`;
+import { SliderContainer, SliderInput } from './Style/Slider.style';
 
 export interface SliderProps {
     totalSeconds: number;

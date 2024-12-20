@@ -6,7 +6,10 @@ export const InputContainer = styled.div`
 
 export const Input = styled.input`
     width: 60px;
-    margin-right: 10px;
-    color: #191970;
-    background-color: #e6e6fa;
+    margin-right: 20px;
+    color: rgb(56, 53, 53);
+    background-color: rgb(247, 242, 242);
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 20px;
 `;
