@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { SliderContainer, SliderInput } from './Style/Slider.style';
 
 export interface SliderProps {
@@ -7,7 +8,7 @@ export interface SliderProps {
     isActive: boolean;
 }
 
-const Slider: React.FC<SliderProps> = ({
+export const Slider: React.FC<SliderProps> = ({
     totalSeconds,
     setTotalSeconds,
     isActive,
@@ -20,16 +21,20 @@ const Slider: React.FC<SliderProps> = ({
     return (
         <SliderContainer>
             <SliderInput
-                type='range'
+                type='range' // элемент слайдера
                 min={0}
                 max={60}
                 step={0.25}
                 value={Math.floor(totalSeconds / 60)}
-                onChange={handleSliderChange}
+                onChange={handleSliderChange} //обработчик изменений для слайдера
                 disabled={isActive}
             />
         </SliderContainer>
     );
 };
 
-export default Slider;
+Slider.propTypes = {
+    totalSeconds: PropTypes.number.isRequired,
+    setTotalSeconds: PropTypes.func.isRequired,
+    isActive: PropTypes.bool.isRequired,
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 
 interface TitleProps {
@@ -11,7 +12,7 @@ export const Title: React.FC<TitleProps> = ({ children }) => {
             variant='h1'
             component='h2'
             sx={{
-                margin: '25px',
+                margin: '30px',
                 padding: '10px 10px',
                 fontSize: '35px',
                 color: '#4B0082',
@@ -22,4 +23,8 @@ export const Title: React.FC<TitleProps> = ({ children }) => {
             {children}
         </Typography>
     );
+};
+
+Title.propTypes = {
+    children: PropTypes.any.isRequired, // Используем PropTypes.any для устранения конфликта
 };

@@ -4,7 +4,7 @@ export const CountdownContainer = styled.div`
     align-items: center;
     justify-content: center;
     margin: auto;
-    width: 50vw;
+    width: 60vw;
     margin-top: 50px;
     font-size: 1rem;
     background-color: #afeeee;

@@ -1,27 +1,32 @@
 import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { TimerWrapper, TimerDisplay } from './Timer.style';
 import { StartButton, PauseButton, StopButton } from '../Button/Button';
 import { Title } from '../Title/Title';
 
-const Timer = memo(() => {
-    const [isRunning, setIsRunning] = useState(false);
-    const [time, setTime] = useState(0);
-    const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+interface TimerProps {
+    initialTime?: number; // Опциональный пропс
+}
+
+const Timer: React.FC<TimerProps> = memo(({ initialTime = 0 }) => {
+    const [isRunning, setIsRunning] = useState(false); // Состояние отслеживающее запущен ли таймер
+    const [time, setTime] = useState(initialTime); // Состояние для хранения времени
+    const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); //id интервала с указанием типа
 
     const startTimer = useCallback(() => {
         if (!isRunning) {
             setIsRunning(true);
             const id = setInterval(() => {
-                setTime(prevTime => prevTime + 10);
+                setTime(prevTime => prevTime + 10); //запускаем интервал, каждые 10 миллисек прибавляем 10 миллисек
             }, 10);
-            setIntervalId(id);
+            setIntervalId(id); // сохраняем id
         }
-    }, [isRunning]);
+    }, [isRunning]); //указываем зависимость при которой ф-я будет пересоздана
 
     const pauseTimer = useCallback(() => {
         if (isRunning && intervalId !== null) {
-            clearInterval(intervalId);
-            setIsRunning(false);
+            clearInterval(intervalId); //очищаем интервал
+            setIsRunning(false); //останавливаем таймер
         }
     }, [isRunning, intervalId]);
 
@@ -29,9 +34,9 @@ const Timer = memo(() => {
         if (intervalId !== null) {
             clearInterval(intervalId);
         }
-        setTime(0);
+        setTime(initialTime);
         setIsRunning(false);
-    }, [intervalId]);
+    }, [intervalId, initialTime]);
 
     useEffect(() => {
         return () => {
@@ -62,5 +67,8 @@ const Timer = memo(() => {
     );
 });
 
-Timer.displayName = 'Timer'; // Устанавливаем имя компонента
+Timer.propTypes = {
+    initialTime: PropTypes.number, // Начальное время в миллисекундах, опционально
+};
+
 export { Timer };

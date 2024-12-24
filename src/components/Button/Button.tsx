@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ButtonStyled } from './Button.style';
+import { SwitchButtonStyled } from './Button.style';
 
 interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    children: React.ReactNode;
+    //встроенный тип в React, который содержит все стандартные HTML атрибуты для элемента <button>
+    children: React.ReactNode; //передаем любые элементы React
     variant?: 'contained' | 'outlined' | 'text';
     color?: 'inherit' | 'primary' | 'secondary';
 }
@@ -13,6 +15,7 @@ export function Button({ children, ...rest }: IButton) {
     return <ButtonStyled {...rest}>{children}</ButtonStyled>;
 }
 
+//интерфейс для обработчиков
 interface IButtonWithClick {
     onClick: () => void;
     children: React.ReactNode;
@@ -35,19 +38,18 @@ export const StopButton: React.FC<IButtonWithClick> = ({
 
 interface ISwitchButtonProps extends IButtonWithClick {
     isTimer: boolean;
+    sx?: React.CSSProperties;
 }
 
 export const SwitchButton: React.FC<ISwitchButtonProps> = ({
     onClick,
     isTimer,
     children,
+    ...rest
 }) => (
-    <Button onClick={onClick}>
-        {children ||
-            (isTimer
-                ? 'Переключиться на секундомер'
-                : 'Переключиться на таймер')}
-    </Button>
+    <SwitchButtonStyled onClick={onClick} {...rest}>
+        {children || (isTimer ? 'Секундомер' : 'Таймер')}
+    </SwitchButtonStyled>
 );
 
 Button.propTypes = {

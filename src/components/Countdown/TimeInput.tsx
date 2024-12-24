@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { InputContainer, Input } from './Style/TimeInput.style';
 
 export interface TimeInputProps {
@@ -9,7 +10,7 @@ export interface TimeInputProps {
 
 export const TimeInput: React.FC<TimeInputProps> = ({
     totalSeconds,
-    setTotalSeconds,
+    setTotalSeconds, //функция обновляет состояние общего времени
     isActive,
 }) => {
     const handleMinutesChange = (
@@ -44,4 +45,10 @@ export const TimeInput: React.FC<TimeInputProps> = ({
             />
         </InputContainer>
     );
+};
+
+TimeInput.propTypes = {
+    totalSeconds: PropTypes.number.isRequired,
+    setTotalSeconds: PropTypes.func.isRequired,
+    isActive: PropTypes.bool.isRequired,
 };
