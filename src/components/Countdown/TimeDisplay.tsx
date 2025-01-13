@@ -1,5 +1,5 @@
 import React from 'react';
-import { TimeDisplayContainer } from './Style/TimeDisplay.style';
+import { TimeDisplayContainer } from './Style/StyledTimeDisplay';
 
 interface TimeDisplayProps {
     remainingTime: number;

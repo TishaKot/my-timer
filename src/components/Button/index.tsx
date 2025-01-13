@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ButtonStyled } from './Button.style';
-import { SwitchButtonStyled } from './Button.style';
+import { ButtonStyled } from './StyledButton';
 
 interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     //встроенный тип в React, который содержит все стандартные HTML атрибуты для элемента <button>
@@ -35,22 +34,6 @@ export const StopButton: React.FC<IButtonWithClick> = ({
     onClick,
     children,
 }) => <Button onClick={onClick}>{children || 'Стоп'}</Button>;
-
-interface ISwitchButtonProps extends IButtonWithClick {
-    isTimer: boolean;
-    sx?: React.CSSProperties;
-}
-
-export const SwitchButton: React.FC<ISwitchButtonProps> = ({
-    onClick,
-    isTimer,
-    children,
-    ...rest
-}) => (
-    <SwitchButtonStyled onClick={onClick} {...rest}>
-        {children || (isTimer ? 'Секундомер' : 'Таймер')}
-    </SwitchButtonStyled>
-);
 
 Button.propTypes = {
     children: PropTypes.node,

@@ -1,28 +1,27 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TimeInput } from './TimeInput'; //компонент для ввода времени.
-import { Slider } from './Slider'; //компонент для выбора времени с помощью ползунка
-import { Progress } from './Progress'; //компонент для отображения прогресса
-import { CountdownContainer } from './Style/Countdown.style'; //стилизованный контейнер для всего компонента
-import { StartButton, PauseButton, StopButton } from '../Button/Button';
+import { TimeInput } from './TimeInput';
+import { Slider } from './Slider';
+import { Progress } from './Progress';
+import { CountdownContainer } from './Style/StyledCountdown';
+import { StartButton, PauseButton, StopButton } from '../Button';
 import { Title } from '../Title/Title';
-import { TimeDisplay } from './TimeDisplay'; //стилизованный компонент для отображения оставшегося времени
+import { TimeDisplay } from './TimeDisplay';
 
 export const Countdown = () => {
     const [isActive, setIsActive] = useState(false);
-    const [totalSeconds, setTotalSeconds] = useState(0); //общее время в секундах функция для его обновления
-    const [remainingTime, setRemainingTime] = useState(0); //оставшееся время и функция  для его обновления. Начальное значение — 0.
+    const [totalSeconds, setTotalSeconds] = useState(0);
+    const [remainingTime, setRemainingTime] = useState(0);
 
     const playSound = useMemo(
         () => new Audio(`${process.env.PUBLIC_URL}/playSound.mp3`),
         []
     );
 
-    //Эффект для логики таймера
     useEffect(() => {
-        let intervalId: ReturnType<typeof setInterval> | null = null; // Используем ReturnType
+        let intervalId: ReturnType<typeof setInterval> | null = null;
 
-        if (isActive) {
+        if (isActive && remainingTime > 0) {
             intervalId = setInterval(() => {
                 setRemainingTime(prev => {
                     if (prev <= 1) {
@@ -40,34 +39,36 @@ export const Countdown = () => {
                 clearInterval(intervalId);
             }
         };
-    }, [isActive, playSound]);
+    }, [isActive, playSound, remainingTime]);
 
-    //Эффект для остановки таймера
     useEffect(() => {
         if (remainingTime === 0 && isActive) {
-            setIsActive(false); // Остановка таймера, когда время заканчивается
+            setIsActive(false);
         }
     }, [remainingTime, isActive]);
 
-    //функция активации таймера
     const startCountdown = () => {
         setIsActive(true);
-
         if (remainingTime === 0) {
             setRemainingTime(totalSeconds);
         }
     };
 
-    //функция приостановки(пауза) таймера
     const pauseCountdown = () => {
         setIsActive(false);
     };
 
-    //функция остановки таймера
     const stopCountdown = () => {
         setIsActive(false);
         setRemainingTime(0);
         setTotalSeconds(0);
+    };
+
+    const handleTotalSecondsChange = (newTotalSeconds: number) => {
+        setTotalSeconds(newTotalSeconds);
+        if (!isActive) {
+            setRemainingTime(newTotalSeconds); // Обновляем оставшееся время, если таймер на паузе
+        }
     };
 
     return (
@@ -75,15 +76,18 @@ export const Countdown = () => {
             <Title>Таймер обратного отсчета</Title>
             <TimeInput
                 totalSeconds={totalSeconds}
-                setTotalSeconds={setTotalSeconds}
+                setTotalSeconds={handleTotalSecondsChange} // Передаем новую функцию
                 isActive={isActive}
             />
             <Slider
                 totalSeconds={totalSeconds}
-                setTotalSeconds={setTotalSeconds}
+                setTotalSeconds={handleTotalSecondsChange} // Передаем новую функцию
                 isActive={isActive}
             />
-            <Progress value={totalSeconds - remainingTime} max={totalSeconds} />
+            <Progress
+                value={totalSeconds - remainingTime} // Прогресс 0, если таймер не активен
+                max={totalSeconds}
+            />
             <TimeDisplay remainingTime={remainingTime} />
             {!isActive ? (
                 <StartButton onClick={startCountdown}>Старт</StartButton>

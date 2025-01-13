@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SliderContainer, SliderInput } from './Style/Slider.style';
+import { SliderContainer, SliderInput } from './Style/StyledSlider';
 
 export interface SliderProps {
     totalSeconds: number;

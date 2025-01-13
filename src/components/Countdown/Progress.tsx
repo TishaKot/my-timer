@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ProgressBar, ProgressBarContainer } from './Style/Progress.style';
+import { ProgressBar, ProgressBarContainer } from './Style/StyledProgress';
 
 export interface ProgressProps {
-    value: number; //текущее значение прогресса
-    max: number; //максимальное значение прогресса
+    value: number;
+    max: number;
 }
 
 export const Progress: React.FC<ProgressProps> = ({ value, max }) => {

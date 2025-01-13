@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Timer } from './components/Timer/Timer';
-import { Countdown } from './components/Countdown/Countdown';
-import { SwitchButton } from './components/Button/Button';
+import { Timer } from './components/Timer';
+import { Countdown } from './components/Countdown';
+import { Button } from './components/Button';
 import { Box } from '@mui/material';
 
 export function App() {
     const [isTimer, setIsTimer] = useState(true);
 
     const toggleComponent = () => {
-        setIsTimer(prev => !prev); // Переключаем состояние
+        setIsTimer(prev => !prev);
     };
 
     return (
@@ -19,9 +19,9 @@ export function App() {
             justifyContent='center'
             minHeight='100vh'
         >
-            <SwitchButton onClick={toggleComponent} isTimer={isTimer}>
+            <Button onClick={toggleComponent}>
                 {isTimer ? 'Таймер' : 'Секундомер'}
-            </SwitchButton>
+            </Button>
             {isTimer ? <Timer /> : <Countdown />}
         </Box>
     );

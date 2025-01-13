@@ -17,17 +17,3 @@ export const ButtonStyled = styled(Button)`
         background-color: rgb(201, 181, 218);
     }
 `;
-
-export const SwitchButtonStyled = styled(ButtonStyled)`
-    && {
-        width: 15rem;
-        padding: 20px;
-        background-color: rgb(143, 146, 143);
-        color: black;
-        border-radius: 10px;
-    }
-    &&:hover {
-        background-color: rgb(109, 84, 142);
-        color: white;
-    }
-`;

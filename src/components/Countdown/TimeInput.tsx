@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InputContainer, Input } from './Style/TimeInput.style';
+import { InputContainer, Input } from './Style/StyledTimeInput';
 
 export interface TimeInputProps {
     totalSeconds: number;
